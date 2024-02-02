@@ -2,9 +2,9 @@
 
 {
     "manifest_version": 3,
-    "name": "CurseForge Modpack Updater",
+    "name": "Shulker Modpack Updater",
     "version": "1.0",
-    "description": "Tool Used for adding mods to a shared modpack from curseforge",
+    "description": "Extension that works with the Shulker Modpack Manager to add mods to a modpack",
     "icons": {
         "16": "images/icon-16.png",
         "32": "images/icon-32.png",

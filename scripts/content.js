@@ -1,51 +1,43 @@
-const article = document.querySelector(".actions");
+const actionTray = document.querySelector(".actions");
+if (actionTray) {
+  var rawModURL = actionTray.querySelector(".btn-cta").href;
+  var fileID = rawModURL.split("/")[7];
+  fetch('http://localhost:8080/check/' + fileID).then(r => r.text()).then(result => {
+    result = JSON.parse(result);
 
-// `document.querySelector` may return null if the selector doesn't match anything.
-if (article) {
-  
-
-  var newURL = article.querySelector(".btn-cta").href;
-  fetch('http://localhost:8080/check/' + newURL.split("/")[7]).then(r => r.text()).then(result => {
-    result = JSON.parse(result)
     for (idx in result.compatible) {
       const badge = document.createElement("a");
-      // Use the same styling as the publish information in an article's header
+      console.log(badge)
+      // Use the same styling as the publish information in an actionTray's header
       badge.classList.add("download-cta", "btn-cta");
       badge.textContent = `➕ Add To ${result.compatible[idx]}`;
-      newURL = `http://localhost:8080/check/${newURL.split("/")[7]}`
-      badge.onclick = clickFunction;
+      badge.onclick = function(event) {
+        fetch('http://localhost:8080/add/'+fileID+'/'+result.compatible[idx]).then(r => r.text()).then(result => {})
+      }
 
-      // Support for API reference docs
-      const heading = article.querySelector("#menuButton");
-      // Support for article docs with date
-      const date = heading.querySelector(".btn-cta");
+
+      const heading = actionTray.querySelector(".split-button");
+
 
       heading.insertAdjacentElement("afterbegin", badge);
-    }
+    };
     for (idx in result.in) {
       const badge = document.createElement("a");
-      // Use the same styling as the publish information in an article's header
+      // Use the same styling as the publish information in an actionTray's header
       badge.classList.add("download-cta", "btn-cta");
       badge.textContent = `✖️ Remove from ${result.in[idx]}`;
-      newURL = `http://localhost:8080/check/${newURL.split("/")[7]}`
-      badge.onclick = clickFunction;
+      modPack = result.in[idx]
+      badge.onclick = function(event) {
+        fetch('http://localhost:8080/remove/'+fileID+'/'+result.in[idx]).then(r => r.text()).then(result => {})
+      }
 
-      // Support for API reference docs
-      const heading = article.querySelector("#menuButton");
-      // Support for article docs with date
-      const date = heading.querySelector(".btn-cta");
+
+      const heading = actionTray.querySelector(".split-button");
+
 
       heading.insertAdjacentElement("afterbegin", badge);
-    }
+    };
 
-    // Result now contains the response text, do what you want...
-  })
+  });
 
-}
-
-
-function clickFunction() {
-  alert("Clicked")
-}
-
-//href="https://www.curseforge.com/minecraft/mc-mods/biomes-o-plenty/download/5020014"
+};
